@@ -8,6 +8,8 @@ import CollectionsView from '@/views/CollectionsView.vue';
 import CollectionView from '@/views/CollectionView.vue';
 import CardsView from '@/views/CardsView.vue';
 import CardView from '@/views/CardView.vue';
+import MyCardsView from "@/views/MyCardsView";
+import MyCardView from "@/views/MyCardView";
 
 const routes = [
     {
@@ -54,6 +56,16 @@ const routes = [
         path: '/cards/:id',
         name: 'CardView',
         component: CardView,
+    },
+    {
+        path: '/my/cards/',
+        name: 'MyCardsView',
+        component: MyCardsView,
+    },
+    {
+        path: '/my/cards/:id',
+        name: 'MyCardView',
+        component: MyCardView,
     },
 ];
 
