@@ -6,13 +6,13 @@
       <button @click.prevent="getRandomCard" class="btn btn-outline-dark">Получить карточку</button>
     </div>
   </div>
-  <div class="row ms-3 me-3">
+  <div class="row ms-3 me-3 mt-3">
     <div v-for="card_entry in card_entries" :key="card_entry.card_entry_id" class="col-lg-2">
-      <div class="card border-dark mb-4 shadow-sm">
+      <div class="card card-fixed-height border-dark shadow-sm mb-4">
         <img :src="card_entry.card.image" alt="" class="card-img-top img-fluid rounded">
         <div class="card-body">
           <h5 class="card-title">{{ card_entry.card.name }}</h5>
-          <div v-html="card_entry.card.short_description" class="truncate"></div>
+          <div v-html="card_entry.card.short_description" class="p-min"></div>
         </div>
         <router-link :to="`/my/cards/${card_entry.card_entry_id}`" class="stretched-link"></router-link>
       </div>
@@ -31,10 +31,7 @@ export default {
     return {
       card_entry_ids: [],
       cards: [],
-      card_entries: [{
-        card_entry_id: Number,
-        card: {}
-      }]
+      card_entries: []
     }
   },
 
@@ -73,13 +70,17 @@ export default {
     },
 
     async getRandomCard() {
+      let params = {params: {source: 'daily'}}
       await axios
-          .post('api/add_card/')
+          .post('api/add_card/', null, params)
           .then(response => {
             console.log(response)
             this.card_ids = response.data
           })
           .catch(error => {
+            if (error.response) {
+              console.log(error.response.data)
+            }
             console.log(error)
           })
       await this.getCardIds()
@@ -88,3 +89,17 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.card-fixed-height {
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin-bottom: 10px;
+  height: 22vw;
+  overflow: hidden;
+}
+.p-min {
+  font-size: 10pt;
+}
+</style>
