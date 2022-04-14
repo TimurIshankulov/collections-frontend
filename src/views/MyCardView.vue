@@ -14,7 +14,12 @@
     </div>
     <div class="col-lg-2"></div>
     <div class="col-lg-2">
-      <button class="btn btn-outline-success">Добавить в коллекцию</button>
+      <template v-if="isAddableToCollection()">
+        <button @click.prevent="addCardToCollection" class="btn btn-outline-success">Добавить в коллекцию</button>
+      </template>
+      <template v-else>
+        <button class="btn btn-outline-dark disabled">Добавить в коллекцию</button>
+      </template>
     </div>
     <div class="col-lg-2">
       <button class="btn btn-outline-danger">Распылить</button>
@@ -41,7 +46,8 @@ export default {
   data() {
     return {
       card: {},
-      card_entry: {}
+      card_entry: {},
+      isAddableToCollectionResult: {}
     }
   },
 
@@ -51,7 +57,6 @@ export default {
 
   methods: {
     async getCardEntry() {
-      console.log(this.$route.params.id)
       await axios
           .get('api/my/cards/' + this.$route.params.id)
           .then(response => {
@@ -74,6 +79,31 @@ export default {
           .catch(error => {
             console.log(error)
           })
+    },
+
+    async addCardToCollection() {
+      await axios
+          .post('api/add_card_to_collection/' + this.$route.params.id)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      await this.$router.push('/my/cards')
+    },
+
+    isAddableToCollection() {
+      axios
+          .get('api/is_addable/' + this.$route.params.id)
+          .then(response => {
+            console.log(response)
+            this.isAddableToCollectionResult = response.data.result === 'true'
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      return this.isAddableToCollectionResult
     }
   }
 }
