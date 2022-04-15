@@ -58,7 +58,7 @@ const routes = [
         component: CardView,
     },
     {
-        path: '/my/cards/',
+        path: '/my/cards',
         name: 'MyCardsView',
         component: MyCardsView,
     },
