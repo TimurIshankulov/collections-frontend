@@ -27,6 +27,10 @@ export default {
     setInterval(() => {
       this.getAccess()
     }, 60000)
+    this.getAccess()
+  },
+  created() {
+
   },
   methods: {
     getAccess() {
@@ -44,6 +48,7 @@ export default {
           })
           .catch(error => {
             console.log(error)
+            this.$router.push('/signout')
           })
     }
   }
