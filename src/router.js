@@ -5,11 +5,11 @@ import SignInView from '@/views/SignInView.vue';
 import SignUpView from '@/views/SignUpView.vue';
 import SignOutView from '@/views/SignOutView.vue';
 import CollectionsView from '@/views/CollectionsView.vue';
-import CollectionView from '@/views/CollectionView.vue';
+import CollectionDetailView from '@/views/CollectionDetailView.vue';
 import CardsView from '@/views/CardsView.vue';
 import CardView from '@/views/CardView.vue';
 import MyCardsView from "@/views/MyCardsView";
-import MyCardView from "@/views/MyCardView";
+import MyCardDetailView from "@/views/MyCardDetailView";
 
 const routes = [
     {
@@ -45,7 +45,7 @@ const routes = [
     {
         path: '/collections/:id',
         name: 'CollectionView',
-        component: CollectionView,
+        component: CollectionDetailView,
     },
     {
         path: '/cards',
@@ -65,7 +65,7 @@ const routes = [
     {
         path: '/my/cards/:id',
         name: 'MyCardView',
-        component: MyCardView,
+        component: MyCardDetailView,
     },
 ];
 
