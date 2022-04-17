@@ -56,7 +56,6 @@ export default {
           .then(response => {
             console.log(response)
             this.collection = response.data
-            //this.card_ids = response.data.cards
           })
           .catch(error => {
             console.log(error)
