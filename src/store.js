@@ -4,7 +4,9 @@ import { createStore } from 'vuex'
 const store = createStore({
     state: {
         access: '',
-        refresh: ''
+        refresh: '',
+        username: '',
+        dust: 0
     },
     mutations: {
         initializeStore(state) {
@@ -24,6 +26,9 @@ const store = createStore({
         },
         setUserName(state, username) {
             state.username = username
+        },
+        setDust(state, dust) {
+            state.dust = dust
         }
     },
     actions: {
