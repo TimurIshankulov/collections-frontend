@@ -1,17 +1,20 @@
 <template>
   <NavigationBar />
+  <StatusBar />
   <router-view />
 </template>
 
 <script>
 import NavigationBar from '@/components/NavigationBar.vue'
 import axios from "axios";
+import StatusBar from "@/components/StatusBar";
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
 export default {
   name: 'App',
   components: {
+    StatusBar,
     NavigationBar,
   },
   beforeCreate() {
@@ -27,28 +30,43 @@ export default {
     setInterval(() => {
       this.getAccess()
     }, 60000)
-    this.getAccess()
+
   },
   created() {
-
+    this.getAccess()
+    this.getUserProfile()
   },
   methods: {
     getAccess() {
-      const accessData = {
-        refresh: this.$store.state.refresh
+      if (this.$store.state.refresh) {
+        const accessData = {
+          refresh: this.$store.state.refresh
+        }
+        axios
+            .post('api/refresh_token/', accessData)
+            .then(response => {
+              const access = response.data.access
+
+              localStorage.setItem('access', access)
+              this.$store.commit('setAccess', access)
+            })
+            .catch(error => {
+              console.log(error)
+              this.$router.push('/signout')
+            })
+      } else {
+        this.$router.push('/signout')
       }
-
+    },
+    getUserProfile() {
       axios
-          .post('api/refresh_token/', accessData)
+          .get('api/profile/')
           .then(response => {
-            const access = response.data.access
-
-            localStorage.setItem('access', access)
-            this.$store.commit('setAccess', access)
+            const dust = response.data.user.dust
+            this.$store.commit('setDust', dust)
           })
           .catch(error => {
             console.log(error)
-            this.$router.push('/signout')
           })
     }
   }
