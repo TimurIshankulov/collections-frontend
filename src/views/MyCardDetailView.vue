@@ -22,7 +22,7 @@
       </template>
     </div>
     <div class="col-lg-2">
-      <button class="btn btn-outline-danger">Распылить</button>
+      <button @click.prevent="turnToDust" class="btn btn-outline-danger">Распылить</button>
     </div>
   </div>
   <br>
@@ -104,6 +104,26 @@ export default {
             console.log(error)
           })
       return this.isAddableToCollectionResult
+    },
+    async turnToDust() {
+      await axios
+          .delete('api/turn_to_dust/' + this.$route.params.id)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      await axios
+          .get('api/profile/')
+          .then(response => {
+            const dust = response.data.user.dust
+            this.$store.commit('setDust', dust)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      await this.$router.push('/my/cards')
     }
   }
 }
