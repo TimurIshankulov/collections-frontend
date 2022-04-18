@@ -14,7 +14,7 @@
     <span class="navbar-text me-3" v-if="getUserName()">{{ username }}</span>
     <template v-if="isLoggedIn">
       <router-link class="btn btn-outline-light me-2" to="/collections">Коллекции</router-link>
-      <router-link class="btn btn-outline-light me-2" to="/cards">Мои карточки</router-link>
+      <router-link class="btn btn-outline-light me-2" to="/my/cards">Мои карточки</router-link>
       <router-link class="btn btn-outline-light me-2" to="/signout">Выход</router-link>
     </template>
     <template v-else>
