@@ -1,0 +1,11 @@
+.card-fixed-height {
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 10px;
+    height: 22vw;
+    overflow: hidden;
+}
+.p-small {
+    font-size: 10pt;
+}
