@@ -17,12 +17,12 @@
     <h4 class="col-lg-4">{{ collection.n_cards }} карточек в коллекции</h4>
   </div>
   <div class="row ms-3 me-3">
-    <div v-for="card in cards" :key="card.id" class="col-md-3">
-      <div class="card border-dark mb-4 shadow-sm">
+    <div v-for="card in cards" :key="card.id" class="col-md-2">
+      <div class="card card-fixed-height border-dark mb-4 shadow-sm">
         <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
         <div class="card-body">
           <h5 class="card-title">{{ card.name }}</h5>
-          <div v-html="card.short_description" class="truncate"></div>
+          <div v-html="card.short_description" class="p-small"></div>
         </div>
         <router-link :to="`/cards/${card.id}`" class="stretched-link"></router-link>
       </div>
