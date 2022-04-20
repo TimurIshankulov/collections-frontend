@@ -33,18 +33,6 @@
 
 import axios from "axios";
 
-const getDateDiff = (date1, date2) => {
-  const diff = new Date(date2.getTime() - date1.getTime());
-  return {
-    year: diff.getUTCFullYear() - 1970,
-    month: diff.getUTCMonth(),
-    day: diff.getUTCDate() - 1,
-    hour: diff.getUTCHours(),
-    minute: diff.getUTCMinutes(),
-    second: diff.getUTCSeconds(),
-  };
-};
-
 export default {
   name: 'MyCardsView',
   data() {
@@ -163,13 +151,25 @@ export default {
       )
     },
 
+    getDateDiff(date1, date2) {
+      const diff = new Date(date2.getTime() - date1.getTime());
+      return {
+        year: diff.getUTCFullYear() - 1970,
+        month: diff.getUTCMonth(),
+        day: diff.getUTCDate() - 1,
+        hour: diff.getUTCHours(),
+        minute: diff.getUTCMinutes(),
+        second: diff.getUTCSeconds(),
+      }
+    },
+
     getDiff() {
       const today = this.convertDateToUTC(new Date)
       const tomorrow = this.convertDateToUTC(new Date)
       tomorrow.setDate(tomorrow.getDate() + 1)
       tomorrow.setHours(0, 0, 0, 0)
 
-      this.diff = getDateDiff(today, tomorrow)
+      this.diff = this.getDateDiff(today, tomorrow)
       if (this.diff['hour'] === 0 && this.diff['minute'] === 0 && this.diff['second'] === 0) {
         this.isDailyCardAvailableResult = true
       }
