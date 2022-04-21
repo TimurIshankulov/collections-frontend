@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       collection: {},
-      card_ids: [],
       cards: []
     }
   },
@@ -60,17 +59,17 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      for (let i = 0; i < this.collection.cards.length; i++) {
-        await axios
-            .get('api/cards/' + this.collection.cards[i])
-            .then(response => {
-              console.log(response)
-              this.cards.push(response.data)
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      }
+
+      let body = {cards: this.collection.cards}
+      await axios
+          .post('api/cards_bulk/', body)
+          .then(response => {
+            console.log(response)
+            this.cards = response.data.results
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
   }
 }

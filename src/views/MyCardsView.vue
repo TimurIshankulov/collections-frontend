@@ -15,14 +15,14 @@
     </div>
   </div>
   <div class="row ms-3 me-3 mt-3">
-    <div v-for="card_entry in card_entries" :key="card_entry.card_entry_id" class="col-lg-2">
+    <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
       <div class="card card-fixed-height border-dark shadow-sm mb-4">
-        <img :src="card_entry.card.image" alt="" class="card-img-top img-fluid rounded">
+        <img :src="card.card.image" alt="" class="card-img-top img-fluid rounded">
         <div class="card-body">
-          <h5 class="card-title">{{ card_entry.card.name }}</h5>
-          <div v-html="card_entry.card.short_description" class="p-small"></div>
+          <h5 class="card-title">{{ card.card.name }}</h5>
+          <div v-html="card.card.short_description" class="p-small"></div>
         </div>
-        <router-link :to="`/my/cards/${card_entry.card_entry_id}`" class="stretched-link"></router-link>
+        <router-link :to="`/my/cards/${card.card_entry_id}`" class="stretched-link"></router-link>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@ export default {
   name: 'MyCardsView',
   data() {
     return {
-      card_entry_ids: [],
+      card_ids: [],
       cards: [],
       card_entries: [],
       isDailyCardAvailableResult: undefined,
@@ -61,11 +61,15 @@ export default {
 
   methods: {
     async getCardIds() {
+      this.card_ids = []
       await axios
           .get('api/my/cards/')
           .then(response => {
             console.log(response)
-            this.card_entry_ids = response.data.results
+            this.card_entries = response.data.results
+            for (let i = 0; i < this.card_entries.length; i++) {
+              this.card_ids.push(this.card_entries[i].card)
+            }
           })
           .catch(error => {
             console.log(error)
@@ -75,45 +79,32 @@ export default {
 
     async getCards() {
       this.cards = []
-      this.card_entries = []
-      for (let i = 0; i < this.card_entry_ids.length; i++) {
-        await axios
-            .get('api/cards/' + this.card_entry_ids[i].card)
-            .then(response => {
-              console.log(response)
-              this.card_entries.push({card_entry_id: this.card_entry_ids[i].id, card: response.data})
-            })
-            .catch(error => {
-              console.log(error)
-            })
-      }
-    },
-
-    async getRandomCardAdmin() {
-      let params = {params: {source: 'admin'}}
+      let body = {cards: this.card_ids}
       await axios
-          .post('api/add_card_admin/', null, params)
+          .post('api/cards_bulk/', body)
           .then(response => {
             console.log(response)
-            this.card_ids = response.data
+            let results = response.data.results
+            for (let i = 0; i < results.length; i++) {
+              this.cards.push({card_entry_id: this.card_entries[i].id, card: results[i]})
+            }
           })
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data)
-            }
             console.log(error)
           })
-      await this.getCardIds()
-      await this.getCards()
     },
 
     async getRandomCard() {
       let params = {params: {source: 'daily'}}
+      let card_entry_id
+      let card
+
       await axios
           .post('api/add_card/', null, params)
           .then(response => {
             console.log(response)
-            this.card_ids = response.data
+            card_entry_id = response.data.card.id
+            card = response.data.card.card
             this.isDailyCardAvailableResult = false
           })
           .catch(error => {
@@ -123,8 +114,45 @@ export default {
             console.log(error)
           })
 
-      await this.getCardIds()
-      await this.getCards()
+      await axios
+          .get('api/cards/' + card)
+          .then(response => {
+            console.log(response)
+            this.cards.push({card_entry_id: card_entry_id, card: response.data})
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    async getRandomCardAdmin() {
+      let params = {params: {source: 'admin'}}
+      let card_entry_id
+      let card
+
+      await axios
+          .post('api/add_card_admin/', null, params)
+          .then(response => {
+            console.log(response)
+            card_entry_id = response.data.card.id
+            card = response.data.card.card
+          })
+          .catch(error => {
+            if (error.response) {
+              console.log(error.response.data)
+            }
+            console.log(error)
+          })
+
+      await axios
+          .get('api/cards/' + card)
+          .then(response => {
+            console.log(response)
+            this.cards.push({card_entry_id: card_entry_id, card: response.data})
+          })
+          .catch(error => {
+            console.log(error)
+          })
     },
 
     getIsDailyCardAvailable() {
