@@ -30,11 +30,11 @@ export default {
     setInterval(() => {
       this.getAccess()
     }, 60000)
-
-  },
-  created() {
     this.getAccess()
     this.getUserProfile()
+  },
+  created() {
+
   },
   methods: {
     getAccess() {
@@ -56,8 +56,10 @@ export default {
             })
       } else {
         this.$router.push('/signout')
+        this.$router.push('/signin')
       }
     },
+
     getUserProfile() {
       axios
           .get('api/profile/')
