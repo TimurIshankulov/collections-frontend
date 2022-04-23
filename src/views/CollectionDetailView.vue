@@ -14,12 +14,19 @@
   </div>
   <br>
   <div class="ms-4 mt-3 mb-3">
-    <h4 class="col-lg-4">{{ collection.n_cards }} карточек в коллекции</h4>
+    <h4 class="col-lg-4">
+      Собрано {{ this.acquired.length }} из {{ this.cards.length }} карточек в коллекции
+    </h4>
   </div>
   <div class="row ms-3 me-3">
     <div v-for="card in cards" :key="card.id" class="col-md-2">
       <div class="card card-fixed-height border-dark mb-4 shadow-sm">
-        <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
+        <template v-if="this.acquired.includes(card.id)">
+          <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
+        </template>
+        <template v-else>
+          <img :src="card.image_grayscaled" alt="" class="card-img-top img-fluid rounded">
+        </template>
         <div class="card-body">
           <h5 class="card-title">{{ card.name }}</h5>
           <div v-html="card.short_description" class="p-small"></div>
@@ -40,12 +47,15 @@ export default {
   data() {
     return {
       collection: {},
-      cards: []
+      cards: [],
+      acquired: [],
+      not_acquired: []
     }
   },
 
   mounted() {
     this.getCollection()
+    this.getCollectionProgress()
   },
 
   methods: {
@@ -66,6 +76,19 @@ export default {
           .then(response => {
             console.log(response)
             this.cards = response.data.results
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+
+    async getCollectionProgress() {
+      await axios
+          .get('api/collection_progress/' + this.$route.params.id)
+          .then(response => {
+            console.log(response)
+            this.acquired = response.data.acquired
+            this.not_acquired = response.data.not_acquired
           })
           .catch(error => {
             console.log(error)
