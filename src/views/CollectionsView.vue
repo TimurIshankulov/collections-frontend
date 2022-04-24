@@ -1,20 +1,20 @@
 <template>
-  <div class="row mt-3">
+  <div class="row mt-3 me-auto">
     <div class="col-lg-2"></div>
     <h3 class="col-lg-4">Коллекции</h3>
     <div class="col-lg-6"></div>
   </div>
   <div v-for="collection in collections" :key="collection.id">
-    <div class="row mt-3">
+    <div class="row mt-3 me-auto">
       <div class="col-lg-2"></div>
       <div class="col-lg-2">
-        <img class="img-fluid rounded" :src="collection.image" alt="">
+        <img class="img-fluid rounded" :src="collection.image1" alt="">
       </div>
       <div class="col-lg-6">
         <router-link class="link-dark" :to="`/collections/${collection.id}`">
           <h4>{{ collection.name }}</h4>
         </router-link>
-        <p v-html="collection.description"></p>
+        <p v-html="collection.short_description"></p>
       </div>
     </div>
   </div>
@@ -46,6 +46,15 @@ export default {
             this.collections = response.data.results
           })
           .catch(error => {
+            if (error.response) {
+              console.log(error.response.data)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+              if (error.response.status === 401) {
+                this.$router.push('/signout')
+                this.$router.push('/signin')
+              }
+            }
             console.log(error)
           })
     }
