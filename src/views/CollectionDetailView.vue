@@ -1,15 +1,17 @@
 <template>
-  <div class="row ms-4 mt-4">
+  <div class="row ms-4 mt-4 me-auto">
     <h3 class="col-lg-4">{{ collection.name }}</h3>
     <div class="col-lg-7"></div>
     <router-link :to="`/collections/`" class="col-lg-1 link-dark">Назад</router-link>
   </div>
   <div class="row ms-3 mt-3 me-3">
     <div class="col-lg-6">
-      <img class="img-fluid rounded" :src="collection.image" alt="">
+      <img class="img-fluid rounded" :src="collection.image1" alt="">
+      <img class="img-fluid rounded mt-3 " :src="collection.image2" alt="">
+      <img class="img-fluid rounded mt-3 " :src="collection.image3" alt="">
     </div>
     <div class="col-lg-6">
-      <p v-html="collection.description"></p>
+      <p v-html="collection.long_description"></p>
     </div>
   </div>
   <br>
@@ -20,7 +22,7 @@
   </div>
   <div class="row ms-3 me-3">
     <div v-for="card in cards" :key="card.id" class="col-md-2">
-      <div class="card card-fixed-height border-dark mb-4 shadow-sm">
+      <div class="card card-fixed-height mb-4">
         <template v-if="this.acquired.includes(card.id)">
           <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
         </template>
@@ -78,6 +80,16 @@ export default {
             this.cards = response.data.results
           })
           .catch(error => {
+            if (error.response) {
+              console.log(error.response.data)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+              if (error.response.status === 401) {
+                this.$router.push('/signout')
+                this.$router.push('/signin')
+              }
+            }
+            alert('Not OK (getCollection)')
             console.log(error)
           })
     },
@@ -94,6 +106,8 @@ export default {
             console.log(error)
           })
     },
-  }
+
+  },
+  computed: {}
 }
 </script>
