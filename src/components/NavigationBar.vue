@@ -11,7 +11,7 @@
         <router-link class="nav-link" to="/contact">Контакты</router-link>
       </li>
     </ul>
-    <span class="navbar-text me-3" v-if="getUserName()">{{ username }}</span>
+    <span class="navbar-text me-3" v-if="isLoggedIn">{{ userName }}</span>
     <template v-if="isLoggedIn">
       <router-link class="btn btn-outline-light me-2" to="/collections">Коллекции</router-link>
       <router-link class="btn btn-outline-light me-2" to="/my/cards">Мои карточки</router-link>
@@ -31,17 +31,18 @@ export default {
   props: {},
   data() {
     return {
-      username: ''
+
     }
   },
   methods: {
-    async getUserName() {
-      this.username = this.$store.state.username
-    }
+
   },
   computed: {
     isLoggedIn() {
       return !!this.$store.state.access;
+    },
+    userName() {
+      return this.$store.state.username
     }
   }
 }
