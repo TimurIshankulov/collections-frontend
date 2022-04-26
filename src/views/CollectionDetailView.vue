@@ -6,9 +6,9 @@
   </div>
   <div class="row ms-3 mt-3 me-3">
     <div class="col-lg-6">
-      <img class="img-fluid rounded" :src="collection.image1" alt="">
-      <img class="img-fluid rounded mt-3 " :src="collection.image2" alt="">
-      <img class="img-fluid rounded mt-3 " :src="collection.image3" alt="">
+      <img class="img-fluid img-shadow rounded" :src="collection.image1" alt="">
+      <img class="img-fluid img-shadow rounded mt-3 " :src="collection.image2" alt="">
+      <img class="img-fluid img-shadow rounded mt-3 " :src="collection.image3" alt="">
     </div>
     <div class="col-lg-6">
       <p v-html="collection.long_description"></p>
@@ -22,7 +22,7 @@
   </div>
   <div class="row ms-3 me-3">
     <div v-for="card in cards" :key="card.id" class="col-md-2">
-      <div class="card card-fixed-height mb-4">
+      <div class="card card-fixed-height mb-4" :class="getRarityClass(card.rarity)">
         <template v-if="this.acquired.includes(card.id)">
           <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
         </template>
@@ -107,6 +107,19 @@ export default {
           })
     },
 
+    getRarityClass(rarity) {
+      let rarityClass = ''
+      if (rarity === 'common') {
+        rarityClass = 'card-common'
+      }
+      if (rarity === 'rare') {
+        rarityClass = 'card-rare'
+      }
+      if (rarity === 'epic') {
+        rarityClass = 'card-epic'
+      }
+      return rarityClass
+    },
   },
   computed: {}
 }
