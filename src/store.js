@@ -1,12 +1,13 @@
 import createPersistedState from "vuex-persistedstate"
 import { createStore } from 'vuex'
+import axios from "axios";
 
 const store = createStore({
     state: {
         access: '',
         refresh: '',
         username: '',
-        dust: 0
+        dust: ''
     },
     mutations: {
         initializeStore(state) {
@@ -32,7 +33,15 @@ const store = createStore({
         }
     },
     actions: {
-
+        async doSignOut(context) {
+            context.commit('setAccess', '')
+            context.commit('setRefresh', '')
+            context.commit('setUserName', '')
+            context.commit('setDust', '')
+            axios.defaults.headers.common['Authorization'] = ''
+            localStorage.removeItem('access')
+            localStorage.removeItem('refresh')
+        }
     },
     modules: {
 
