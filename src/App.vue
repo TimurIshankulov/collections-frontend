@@ -1,7 +1,7 @@
 <template>
-  <NavigationBar />
-  <StatusBar />
-  <router-view />
+  <NavigationBar/>
+  <StatusBar/>
+  <router-view/>
 </template>
 
 <script>
@@ -46,17 +46,15 @@ export default {
             .post('api/refresh_token/', accessData)
             .then(response => {
               const access = response.data.access
-
               localStorage.setItem('access', access)
               this.$store.commit('setAccess', access)
             })
             .catch(error => {
+              if (error.response.status === 401) {
+                this.$store.dispatch('doSignOut')
+              }
               console.log(error)
-              this.$router.push('/signout')
             })
-      } else {
-        this.$router.push('/signout')
-        this.$router.push('/signin')
       }
     },
 
@@ -68,6 +66,10 @@ export default {
             this.$store.commit('setDust', dust)
           })
           .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
             console.log(error)
           })
     }

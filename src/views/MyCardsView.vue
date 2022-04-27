@@ -73,6 +73,10 @@ export default {
           })
           .catch(error => {
             console.log(error)
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
           })
       await this.getCards()
     },
@@ -108,10 +112,11 @@ export default {
             this.isDailyCardAvailableResult = false
           })
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data)
-            }
             console.log(error)
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
           })
 
       await axios

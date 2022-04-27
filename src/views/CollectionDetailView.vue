@@ -69,6 +69,10 @@ export default {
             this.collection = response.data
           })
           .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
             console.log(error)
           })
 
@@ -80,16 +84,10 @@ export default {
             this.cards = response.data.results
           })
           .catch(error => {
-            if (error.response) {
-              console.log(error.response.data)
-              console.log(error.response.status)
-              console.log(error.response.headers)
-              if (error.response.status === 401) {
-                this.$router.push('/signout')
-                this.$router.push('/signin')
-              }
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
             }
-            alert('Not OK (getCollection)')
             console.log(error)
           })
     },

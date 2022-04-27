@@ -5,18 +5,10 @@
 
 <script>
 
-import axios from "axios";
-
 export default {
   name: "SignOutView",
   mounted() {
-    this.$store.commit('setAccess', '')
-    this.$store.commit('setRefresh', '')
-    this.$store.commit('setUserName', '')
-
-    axios.defaults.headers.common['Authorization'] = ''
-    localStorage.removeItem('access')
-    localStorage.removeItem('refresh')
+    this.$store.dispatch('doSignOut')
     this.$router.push('/')
   }
 }
