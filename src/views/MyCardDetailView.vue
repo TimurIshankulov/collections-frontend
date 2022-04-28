@@ -65,6 +65,10 @@ export default {
           })
           .catch(error => {
             console.log(error)
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
           })
       await this.getCard()
     },
@@ -89,6 +93,10 @@ export default {
           })
           .catch(error => {
             console.log(error)
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
           })
       await this.$router.push('/my/cards')
     },
@@ -113,6 +121,10 @@ export default {
           })
           .catch(error => {
             console.log(error)
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
           })
       await axios
           .get('api/profile/')
