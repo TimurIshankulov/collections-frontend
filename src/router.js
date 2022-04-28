@@ -7,7 +7,7 @@ import SignOutView from '@/views/SignOutView.vue';
 import CollectionsView from '@/views/CollectionsView.vue';
 import CollectionDetailView from '@/views/CollectionDetailView.vue';
 import CardsView from '@/views/CardsView.vue';
-import CardView from '@/views/CardView.vue';
+import CardDetailView from '@/views/CardDetailView.vue';
 import MyCardsView from "@/views/MyCardsView";
 import MyCardDetailView from "@/views/MyCardDetailView";
 
@@ -54,8 +54,8 @@ const routes = [
     },
     {
         path: '/cards/:id',
-        name: 'CardView',
-        component: CardView,
+        name: 'CardDetailView',
+        component: CardDetailView,
     },
     {
         path: '/my/cards',
