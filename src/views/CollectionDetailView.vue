@@ -76,7 +76,10 @@ export default {
             console.log(error)
           })
 
-      let body = {cards: this.collection.cards}
+      let body = {
+        cards: this.collection.cards,
+        ordering: 'rarity'
+      }
       await axios
           .post('api/cards_bulk/', body)
           .then(response => {
