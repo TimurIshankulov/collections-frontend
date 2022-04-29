@@ -18,7 +18,7 @@
         <button @click.prevent="addCardToCollection" class="btn btn-outline-success">Добавить в коллекцию</button>
       </template>
       <template v-else>
-        <button class="btn btn-outline-dark disabled">Добавить в коллекцию</button>
+        <button class="btn btn-outline-dark disabled">В коллекции!</button>
       </template>
     </div>
     <div class="col-lg-2">
