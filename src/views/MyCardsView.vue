@@ -16,7 +16,7 @@
   </div>
   <div class="row ms-3 me-3 mt-3">
     <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
-      <div class="card card-fixed-height border-dark shadow-sm mb-4">
+      <div class="card card-fixed-height mb-4" :class="getRarityClass(card.card.rarity)">
         <img :src="card.card.image" alt="" class="card-img-top img-fluid rounded">
         <div class="card-body">
           <h5 class="card-title">{{ card.card.name }}</h5>
@@ -171,6 +171,20 @@ export default {
             console.log(error)
           })
       return this.isDailyCardAvailableResult
+    },
+
+    getRarityClass(rarity) {
+      let rarityClass = ''
+      if (rarity === 'common') {
+        rarityClass = 'card-common'
+      }
+      if (rarity === 'rare') {
+        rarityClass = 'card-rare'
+      }
+      if (rarity === 'epic') {
+        rarityClass = 'card-epic'
+      }
+      return rarityClass
     },
 
     convertDateToUTC(date) {
