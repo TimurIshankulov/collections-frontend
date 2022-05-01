@@ -31,6 +31,11 @@ export default {
       password: ''
     }
   },
+
+  mounted() {
+
+  },
+
   methods: {
     async userLogin() {
       axios.defaults.headers.common['Authorization'] = ''
@@ -69,7 +74,23 @@ export default {
           .catch(error => {
             console.log(error)
           })
+      this.getUserProfile()
+    },
 
+    getUserProfile() {
+      axios
+          .get('api/profile/')
+          .then(response => {
+            const dust = response.data.user.dust
+            this.$store.commit('setDust', dust)
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
+            console.log(error)
+          })
     }
   }
 }

@@ -30,6 +30,11 @@ export default {
       password2: '',
     }
   },
+
+  mounted() {
+
+  },
+
   methods: {
     userSignUp() {
       console.log('here')
@@ -47,7 +52,9 @@ export default {
             console.log(error)
           })
       this.userLogin()
+      this.getUserProfile()
     },
+
     async userLogin() {
       axios.defaults.headers.common['Authorization'] = ''
       localStorage.removeItem('access')
@@ -76,6 +83,22 @@ export default {
             console.log(error)
           })
 
+    },
+
+    getUserProfile() {
+      axios
+          .get('api/profile/')
+          .then(response => {
+            const dust = response.data.user.dust
+            this.$store.commit('setDust', dust)
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
+            console.log(error)
+          })
     }
   }
 }
