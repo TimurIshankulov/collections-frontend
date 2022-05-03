@@ -15,15 +15,16 @@
     </div>
     <div class="col-lg-2"></div>
     <div class="col-lg-2 me-auto">
-      <template v-if="isCraftableResult === 'not_enough_dust'">
-        <button class="btn w-100 btn-outline-dark disabled">Недостаточно пыли</button>
-      </template>
-      <template v-else-if="isCraftableResult === 'already_in_collection'">
+      <template v-if="isCraftableResult === 'already_in_collection'">
         <button class="btn w-100 btn-outline-dark disabled">В коллекции!</button>
+      </template>
+      <template v-else-if="isCraftableResult === 'not_enough_dust'">
+        <button class="btn w-100 btn-outline-dark disabled">Недостаточно пыли</button>
       </template>
       <template v-else-if="isCraftableResult === 'true'">
         <button @click.prevent="craftCard" class="btn w-100 btn-outline-primary">Создать</button>
       </template>
+      <p>Для создания необходимо {{ card.craft_cost }} пыли</p>
       <div class="col-lg-2"></div>
     </div>
   </div>
