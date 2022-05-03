@@ -16,12 +16,35 @@
   </div>
   <div class="row ms-3 me-3 mt-3">
     <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
-      <div class="card card-fixed-height mb-4" :class="getRarityClass(card.card.rarity)">
+      <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.card.rarity)">
+
+        <div class="card-header">
+          <div class="row">
+            <div class="col-10">
+              <h5 class="card-title">
+                {{ card.card.name }}
+              </h5>
+            </div>
+            <div class="col-2 text-end">
+              <span :class="getRarityDotClass(card.card.rarity)"></span>
+            </div>
+          </div>
+        </div>
+
         <img :src="card.card.image" alt="" class="card-img-top img-fluid rounded">
         <div class="card-body">
-          <h5 class="card-title">{{ card.card.name }}</h5>
           <div v-html="card.card.short_description" class="p-small"></div>
         </div>
+
+        <div class="card-footer">
+          <template v-if="card.addable">
+            <p class="mb-auto p-small">Можно добавить!</p>
+          </template>
+          <template v-else>
+            <p class="mb-auto p-small">В коллекции</p>
+          </template>
+        </div>
+
         <router-link :to="`/my/cards/${card.card_entry_id}`" class="stretched-link"></router-link>
       </div>
     </div>
@@ -40,9 +63,11 @@ export default {
       card_ids: [],
       cards: [],
       card_entries: [],
-      isDailyCardAvailableResult: undefined,
+      isDailyCardAvailableResult: Boolean,
       diff: undefined,
       timer: undefined,
+      acquired: [],
+      not_acquired: []
     }
   },
 
@@ -86,11 +111,16 @@ export default {
       let body = {cards: this.card_ids}
       await axios
           .post('api/cards_bulk/', body)
-          .then(response => {
+          .then(async response => {
             console.log(response)
             let results = response.data.results
             for (let i = 0; i < results.length; i++) {
-              this.cards.push({card_entry_id: this.card_entries[i].id, card: results[i]})
+              let addable_to_collection = await this.isAddableToCollection(this.card_entries[i].id)
+              this.cards.push({
+                card_entry_id: this.card_entries[i].id,
+                card: results[i],
+                addable: addable_to_collection
+              })
             }
           })
           .catch(error => {
@@ -173,7 +203,21 @@ export default {
       return this.isDailyCardAvailableResult
     },
 
-    getRarityClass(rarity) {
+    async isAddableToCollection(card_id) {
+      let result
+      await axios
+          .get('api/is_addable/' + card_id)
+          .then(response => {
+            console.log(response)
+            result = response.data.result === 'true'
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      return result
+    },
+
+    getRarityCardClass(rarity) {
       let rarityClass = ''
       if (rarity === 'common') {
         rarityClass = 'card-common'
@@ -183,6 +227,20 @@ export default {
       }
       if (rarity === 'epic') {
         rarityClass = 'card-epic'
+      }
+      return rarityClass
+    },
+
+    getRarityDotClass(rarity) {
+      let rarityClass = ''
+      if (rarity === 'common') {
+        rarityClass = 'dot-common'
+      }
+      if (rarity === 'rare') {
+        rarityClass = 'dot-rare'
+      }
+      if (rarity === 'epic') {
+        rarityClass = 'dot-epic'
       }
       return rarityClass
     },
