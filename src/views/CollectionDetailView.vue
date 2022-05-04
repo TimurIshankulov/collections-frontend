@@ -1,14 +1,16 @@
 <template>
   <div class="row ms-4 mt-4 me-auto">
+    <div class="col-lg-1"></div>
     <h3 class="col-lg-4">{{ collection.name }}</h3>
-    <div class="col-lg-7"></div>
+    <div class="col-lg-6"></div>
     <div class="col-lg-1">
       <router-link :to="`/collections/`" class="link-dark">Назад</router-link>
     </div>
   </div>
 
   <div class="row ms-3 mt-3 me-3">
-    <div class="col-lg-6">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-5">
       <img class="img-fluid img-shadow rounded" :src="collection.image1" alt="">
       <img class="img-fluid img-shadow rounded mt-3 " :src="collection.image2" alt="">
       <img class="img-fluid img-shadow rounded mt-3 " :src="collection.image3" alt="">
@@ -22,50 +24,57 @@
   <br>
 
   <div class="row ms-3 mt-3 mb-3 me-auto">
+    <div class="col-lg-1"></div>
     <h4 class="col-lg-4">
       Собрано {{ this.acquired.length }} из {{ this.cards.length }} карточек в коллекции
     </h4>
   </div>
   <div class="row ms-3 me-3">
-    <div v-for="card in cards" :key="card.id" class="col-md-2">
-      <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.rarity)">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+      <div class="row">
+        <div v-for="card in cards" :key="card.id" class="col-lg-2">
+          <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.rarity)">
 
-        <div class="card-header">
-          <div class="row">
-            <div class="col-10">
-              <h5 class="card-title">
-                {{ card.name }}
-              </h5>
+            <div class="card-header">
+              <div class="row">
+                <div class="col-10">
+                  <h5 class="card-title">
+                    {{ card.name }}
+                  </h5>
+                </div>
+                <div class="col-2 text-end">
+                  <span :class="getRarityDotClass(card.rarity)"></span>
+                </div>
+              </div>
             </div>
-            <div class="col-2 text-end">
-              <span :class="getRarityDotClass(card.rarity)"></span>
+
+            <template v-if="this.acquired.includes(card.id)">
+              <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
+            </template>
+            <template v-else>
+              <img :src="card.image_grayscaled" alt="" class="card-img-top img-fluid rounded">
+            </template>
+
+            <div class="card-body">
+              <div v-html="card.short_description" class="p-small"></div>
             </div>
-          </div>
-        </div>
 
-        <template v-if="this.acquired.includes(card.id)">
-          <img :src="card.image" alt="" class="card-img-top img-fluid rounded">
-        </template>
-        <template v-else>
-          <img :src="card.image_grayscaled" alt="" class="card-img-top img-fluid rounded">
-        </template>
+            <div class="card-footer">
+              <template v-if="this.acquired.includes(card.id)">
+                <p class="mb-auto p-small">В коллекции</p>
+              </template>
+              <template v-else>
+                <p class="mb-auto p-small">Не получено</p>
+              </template>
+            </div>
 
-        <div class="card-body">
-          <div v-html="card.short_description" class="p-small"></div>
-        </div>
-
-        <div class="card-footer">
-          <template v-if="this.acquired.includes(card.id)">
-            <p class="mb-auto p-small">В коллекции</p>
-          </template>
-          <template v-else>
-            <p class="mb-auto p-small">Не получено</p>
-          </template>
-        </div>
-
-        <router-link :to="`/cards/${card.id}`" class="stretched-link"></router-link>
-      </div>
-    </div>
+            <router-link :to="`/cards/${card.id}`" class="stretched-link"></router-link>
+          </div>  <!-- end card -->
+        </div>  <!-- end cycle -->
+      </div>  <!-- end row -->
+    </div>  <!-- end col-lg-10 -->
+    <div class="col-lg-1"></div>
   </div>
 
 </template>

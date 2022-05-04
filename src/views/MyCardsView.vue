@@ -1,7 +1,8 @@
 <template>
-  <div class="row ms-4 mt-4 me-3">
+  <div class="row ms-4 mb-4 mt-4 me-3">
+    <div class="col-lg-1"></div>
     <h3 class="col-lg-4">Мои карточки</h3>
-    <div class="col-lg-4"></div>
+    <div class="col-lg-2"></div>
     <div class="col-lg-2 text-end">
       <template v-if="IsDailyCardAvailable">
         <button @click.prevent="getRandomCard" class="btn w-100 btn-outline-primary">Получить карточку</button>
@@ -13,41 +14,48 @@
     <div class="col-lg-2 text-end">
       <button @click.prevent="getRandomCardAdmin" class="btn w-100 btn-outline-dark">Получить карточку (админ)</button>
     </div>
+    <div class="col-lg-1"></div>
   </div>
   <div class="row ms-3 me-3 mt-3">
-    <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
-      <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.card.rarity)">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+      <div class="row">
+        <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
+          <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.card.rarity)">
 
-        <div class="card-header">
-          <div class="row">
-            <div class="col-10">
-              <h5 class="card-title">
-                {{ card.card.name }}
-              </h5>
+            <div class="card-header">
+              <div class="row">
+                <div class="col-10">
+                  <h5 class="card-title">
+                    {{ card.card.name }}
+                  </h5>
+                </div>
+                <div class="col-2 text-end">
+                  <span :class="getRarityDotClass(card.card.rarity)"></span>
+                </div>
+              </div>
             </div>
-            <div class="col-2 text-end">
-              <span :class="getRarityDotClass(card.card.rarity)"></span>
+
+            <img :src="card.card.image" alt="" class="card-img-top img-fluid rounded">
+            <div class="card-body">
+              <div v-html="card.card.short_description" class="p-small"></div>
             </div>
+
+            <div class="card-footer">
+              <template v-if="card.addable">
+                <p class="mb-auto p-small">Можно добавить!</p>
+              </template>
+              <template v-else>
+                <p class="mb-auto p-small">В коллекции</p>
+              </template>
+            </div>
+
+            <router-link :to="`/my/cards/${card.card_entry_id}`" class="stretched-link"></router-link>
           </div>
         </div>
-
-        <img :src="card.card.image" alt="" class="card-img-top img-fluid rounded">
-        <div class="card-body">
-          <div v-html="card.card.short_description" class="p-small"></div>
-        </div>
-
-        <div class="card-footer">
-          <template v-if="card.addable">
-            <p class="mb-auto p-small">Можно добавить!</p>
-          </template>
-          <template v-else>
-            <p class="mb-auto p-small">В коллекции</p>
-          </template>
-        </div>
-
-        <router-link :to="`/my/cards/${card.card_entry_id}`" class="stretched-link"></router-link>
-      </div>
-    </div>
+      </div>  <!-- end row -->
+    </div>  <!-- end col-lg-10 -->
+    <div class="col-lg-1"></div>
   </div>
 </template>
 
