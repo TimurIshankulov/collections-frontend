@@ -120,11 +120,14 @@ export default {
         cards: this.collection.cards,
         ordering: 'rarity'
       }
+      this.cards = []
       await axios
           .post('api/cards_bulk/', body)
           .then(response => {
             console.log(response)
-            this.cards = response.data.results
+            for (let i = 0; i < response.data.results.length; i++) {
+              this.cards.push(response.data.results[i].card)
+            }
           })
           .catch(error => {
             if (error.response.status === 401) {
