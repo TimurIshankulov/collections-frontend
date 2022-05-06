@@ -1,21 +1,27 @@
 <template>
+
   <div class="row ms-4 mb-4 mt-4 me-3">
     <div class="col-lg-1"></div>
-    <h3 class="col-lg-4">Мои карточки</h3>
-    <div class="col-lg-2"></div>
-    <div class="col-lg-2 text-end">
-      <template v-if="IsDailyCardAvailable">
-        <button @click.prevent="getRandomCard" class="btn w-100 btn-outline-primary">Получить карточку</button>
-      </template>
-      <template v-else>
-        <button class="btn w-100 btn-outline-dark disabled">Получить карточку {{ diffFormatted }}</button>
-      </template>
-    </div>
-    <div class="col-lg-2 text-end">
-      <button @click.prevent="getRandomCardAdmin" class="btn w-100 btn-outline-dark">Получить карточку (админ)</button>
-    </div>
+    <div class="col-lg-10">
+      <div class="row">
+        <h3 class="col-lg-8">Мои карточки</h3>
+        <div class="col-lg-2 text-end">
+          <template v-if="IsDailyCardAvailable">
+            <button @click.prevent="getRandomCard" class="btn w-100 btn-outline-primary">Получить карточку</button>
+          </template>
+          <template v-else>
+            <button class="btn w-100 btn-outline-dark disabled">Получить карточку {{ diffFormatted }}</button>
+          </template>
+        </div>
+        <div class="col-lg-2 text-end">
+          <button @click.prevent="getRandomCardAdmin" class="btn w-100 btn-outline-dark">Получить карточку (админ)
+          </button>
+        </div>
+      </div>  <!-- end row -->
+    </div>  <!-- end col-lg-10 -->
     <div class="col-lg-1"></div>
-  </div>
+  </div>  <!-- end row -->
+
   <div class="row ms-3 me-3 mt-3">
     <div class="col-lg-1"></div>
     <div class="col-lg-10">
@@ -51,8 +57,8 @@
             </div>
 
             <router-link :to="`/my/cards/${card.card_entry_id}`" class="stretched-link"></router-link>
-          </div>
-        </div>
+          </div>  <!-- end card -->
+        </div>  <!-- end cycle -->
       </div>  <!-- end row -->
     </div>  <!-- end col-lg-10 -->
     <div class="col-lg-1"></div>
@@ -123,11 +129,10 @@ export default {
             console.log(response)
             let results = response.data.results
             for (let i = 0; i < results.length; i++) {
-              let addable_to_collection = await this.isAddableToCollection(this.card_entries[i].id)
               this.cards.push({
                 card_entry_id: this.card_entries[i].id,
-                card: results[i],
-                addable: addable_to_collection
+                card: results[i].card,
+                addable: results[i].addable === 'true'
               })
             }
           })
@@ -209,20 +214,6 @@ export default {
             console.log(error)
           })
       return this.isDailyCardAvailableResult
-    },
-
-    async isAddableToCollection(card_id) {
-      let result
-      await axios
-          .get('api/is_addable/' + card_id)
-          .then(response => {
-            console.log(response)
-            result = response.data.result === 'true'
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      return result
     },
 
     getRarityCardClass(rarity) {
