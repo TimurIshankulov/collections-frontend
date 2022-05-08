@@ -11,9 +11,18 @@
         <img class="img-fluid rounded" :src="collection.image1" alt="">
       </div>
       <div class="col-lg-6">
-        <router-link class="link-dark" :to="`/collections/${collection.id}`">
-          <h4>{{ collection.name }}</h4>
-        </router-link>
+        <div class="row">
+          <div class="col-lg-8">
+            <router-link class="link-dark" :to="`/collections/${collection.id}`">
+              <h4>{{ collection.name }}</h4>
+            </router-link>
+          </div>
+          <div class="col-lg-4 text-end">
+            <template v-if="completed_collections.includes(collection.id)">
+              <p class="text-success">Коллекция собрана!</p>
+            </template>
+          </div>
+        </div>
         <p v-html="collection.short_description"></p>
       </div>
     </div>
@@ -29,12 +38,14 @@ export default {
   name: 'CollectionsView',
   data() {
     return {
-      collections: []
+      collections: [],
+      completed_collections: []
     }
   },
 
   mounted() {
     this.getCollections()
+    this.getUserProfile()
   },
 
   methods: {
@@ -51,6 +62,23 @@ export default {
               this.$store.dispatch('doSignOut')
               this.$router.push('/signin')
             }
+          })
+    },
+
+    async getUserProfile() {
+      await axios
+          .get('api/profile/')
+          .then(response => {
+            console.log(response)
+            this.completed_collections = response.data.user.collections
+            console.log(this.completed_collections.includes(1))
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
+            console.log(error)
           })
     }
   }
