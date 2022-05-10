@@ -1,8 +1,19 @@
 <template>
   <div class="row mt-3 me-auto">
     <div class="col-lg-2"></div>
-    <h3 class="col-lg-4">Коллекции</h3>
-    <div class="col-lg-6"></div>
+    <div class="col-lg-2">
+      <h3>Коллекции</h3>
+    </div>
+    <div class="col-lg-3 text-end">
+      <p>Коллекций собрано: {{ n_user_collections }} / {{ n_collections }}</p>
+    </div>
+    <div class="col-lg-3 text-end">
+      <p>Уникальных карточек в коллекциях: {{ n_user_cards }} / {{ n_cards }}</p>
+    </div>
+    <div class="col-lg-2"></div>
+  </div>
+  <div class="row mt-3 me-auto">
+
   </div>
   <div v-for="collection in collections" :key="collection.id">
     <div class="row mt-3 me-auto">
@@ -39,13 +50,18 @@ export default {
   data() {
     return {
       collections: [],
-      completed_collections: []
+      completed_collections: [],
+      n_user_cards: Number,
+      n_user_collections: Number,
+      n_cards: Number,
+      n_collections: Number
     }
   },
 
   mounted() {
     this.getCollections()
     this.getUserProfile()
+    this.getUserStatistics()
   },
 
   methods: {
@@ -71,7 +87,25 @@ export default {
           .then(response => {
             console.log(response)
             this.completed_collections = response.data.user.collections
-            console.log(this.completed_collections.includes(1))
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              this.$store.dispatch('doSignOut')
+              this.$router.push('/signin')
+            }
+            console.log(error)
+          })
+    },
+
+    async getUserStatistics() {
+      await axios
+          .get('api/get_user_statistics/')
+          .then(response => {
+            console.log(response)
+            this.n_user_cards = response.data.n_user_cards
+            this.n_user_collections = response.data.n_user_collections
+            this.n_cards = response.data.n_cards
+            this.n_collections = response.data.n_collections
           })
           .catch(error => {
             if (error.response.status === 401) {
