@@ -1,20 +1,17 @@
 <template>
   <NavigationBar/>
-  <StatusBar/>
   <router-view/>
 </template>
 
 <script>
 import NavigationBar from '@/components/NavigationBar.vue'
 import axios from "axios";
-import StatusBar from "@/components/StatusBar";
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
 export default {
   name: 'App',
   components: {
-    StatusBar,
     NavigationBar,
   },
   beforeCreate() {
