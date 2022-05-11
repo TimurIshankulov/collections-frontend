@@ -11,6 +11,7 @@
         <router-link class="nav-link" to="/contact">Контакты</router-link>
       </li>
     </ul>
+    <span class="navbar-text me-5" v-if="isLoggedIn">{{ amountOfDust }} пыли</span>
     <span class="navbar-text me-3" v-if="isLoggedIn">{{ userName }}</span>
     <template v-if="isLoggedIn">
       <router-link class="btn btn-outline-light me-2" to="/collections">Коллекции</router-link>
@@ -43,6 +44,9 @@ export default {
     },
     userName() {
       return this.$store.state.username
+    },
+    amountOfDust() {
+      return this.$store.state.dust
     }
   }
 }
