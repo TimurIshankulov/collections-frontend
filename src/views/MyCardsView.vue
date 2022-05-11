@@ -1,6 +1,6 @@
 <template>
 
-  <div class="row ms-4 mb-4 mt-4 me-3">
+  <div class="row ms-3 mb-4 mt-4 me-3">
     <div class="col-lg-1"></div>
     <div class="col-lg-10">
       <div class="row">
@@ -26,6 +26,9 @@
     <div class="col-lg-1"></div>
     <div class="col-lg-10">
       <div class="row">
+        <template v-if="cards.length === 0">
+          <p class="mt-3 text-muted">Карточек пока нет!</p>
+        </template>
         <div v-for="card in cards" :key="card.card_entry_id" class="col-lg-2">
           <div class="card card-fixed-height mb-4" :class="getRarityCardClass(card.card.rarity)">
 
