@@ -39,9 +39,9 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-10">
-                  <h5 class="card-title">
+                  <h6 class="card-title">
                     {{ card.name }}
-                  </h5>
+                  </h6>
                 </div>
                 <div class="col-2 text-end">
                   <span :class="getRarityDotClass(card.rarity)"></span>
