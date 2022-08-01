@@ -1,7 +1,7 @@
 .card-fixed-height {
     padding: 10px;
     margin-bottom: 10px;
-    height: 24vw;
+    height: 22vw;
     overflow: hidden;
 }
 .card-generic {
@@ -65,4 +65,9 @@
 
 .p-small {
     font-size: 10pt;
+}
+
+.empty-col {
+    margin-bottom: -500px;
+    padding-bottom: 500px;
 }
